@@ -23,12 +23,12 @@
             <Font name="System Bold" size="19.0" />
          </font>
       </Button>
-      <Button fx:id="play" layoutX="230.0" layoutY="285.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="110.0" text="PLAY" textFill="RED">
+      <Button fx:id="play" layoutX="230.0" layoutY="285.0" mnemonicParsing="false" onAction="#soundOn" prefHeight="48.0" prefWidth="110.0" text="PLAY" textFill="RED">
          <font>
             <Font name="System Bold" size="22.0" />
          </font>
       </Button>
-      <Button fx:id="pause" layoutX="378.0" layoutY="285.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="110.0" text="PAUSE" textFill="RED">
+      <Button fx:id="pause" layoutX="378.0" layoutY="285.0" mnemonicParsing="false" onAction="#soundOff" prefHeight="48.0" prefWidth="110.0" text="PAUSE" textFill="RED">
          <font>
             <Font name="System Bold" size="22.0" />
          </font>
