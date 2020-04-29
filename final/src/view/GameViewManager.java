@@ -15,6 +15,8 @@ public class GameViewManager {
 	private static final int GAME_WIDTH = 800;
 	private static final int GAME_HEIGHT = 800;
 	
+	private Stage menuStage;
+	
 	public GameViewManager() {
 		initializeStage();
 		createKeyListeners();
@@ -56,5 +58,12 @@ public class GameViewManager {
 			}
 			
 		});
+	}
+	
+	public void createNewGame(Stage menuStage) {
+		this.menuStage = menuStage;
+		//TODO add logic for ball
+		this.menuStage.hide();
+		gameStage.show();
 	}
 }
