@@ -24,6 +24,7 @@ public class Main extends Application {
 		String musicFile = "sand.mp3";
 		Media sound = new Media(new File(musicFile).toURI().toString());
 		MediaPlayer mediaPlayer = new MediaPlayer(sound);
+		mediaPlayer.setVolume(.3);
 		mediaPlayer.play();
 		
 		Parent root = FXMLLoader.load(getClass().getResource("HomePage.fxml"));
