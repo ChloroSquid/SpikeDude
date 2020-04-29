@@ -4,8 +4,10 @@ import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.Scene;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import model.BALL;
 
 public class GameViewManager {
 	private AnchorPane gamePane;
@@ -16,6 +18,9 @@ public class GameViewManager {
 	private static final int GAME_HEIGHT = 800;
 	
 	private Stage menuStage;
+	
+	BALL ballEnum;
+	ImageView ball;
 	
 	public GameViewManager() {
 		initializeStage();
@@ -64,10 +69,17 @@ public class GameViewManager {
 		this.menuStage = menuStage;
 		//TODO add logic for ball
 		this.menuStage.hide();
+		createBall();
 		gameStage.show();
+		
 	}
 	
 	private void createBall() {
-		
+		ball = new ImageView("file:Spike Dude ball.png");
+		ball.resize(100, 100);
+		ball.setLayoutX(GAME_WIDTH/2);
+		ball.setLayoutY(GAME_HEIGHT-90);
+
+		gamePane.getChildren().add(ball);
 	}
 }

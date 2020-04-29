@@ -7,4 +7,8 @@ public enum BALL {
 	private BALL(String urlBall) {
 		this.urlBall = urlBall;
 	}
+	
+	public String getURL() {
+		return urlBall;
+	}
 }
