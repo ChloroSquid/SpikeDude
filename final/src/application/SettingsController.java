@@ -20,10 +20,13 @@ public class SettingsController {
 	}
 	
 	@FXML
-	void handleSound(ActionEvent event) {
+	void soundOn(ActionEvent event) {
+	
+	}
+	
+	@FXML
+	void soundOff(ActionEvent event) {
 		
-		
-
 	}
 
 }
