@@ -4,6 +4,7 @@ import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -75,11 +76,12 @@ public class GameViewManager {
 	}
 	
 	private void createBall() {
-		ball = new ImageView("file:Spike Dude ball.png");
+		//Image image = new Image("file:/src/ball.png");
+		ball = new ImageView("file:ball.png");
 		ball.resize(100, 100);
 		ball.setLayoutX(GAME_WIDTH/2);
 		ball.setLayoutY(GAME_HEIGHT-90);
-
+		//System.out.println(image.isError());
 		gamePane.getChildren().add(ball);
 	}
 }
