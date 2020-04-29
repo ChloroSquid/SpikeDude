@@ -27,6 +27,13 @@ public class MainController {
 	void handleExit(ActionEvent actionevent) {
 		System.exit(0);
 	}
+	
+	@FXML
+	void handlePlay(ActionEvent actionevent) {
+		Stage stage = new Stage();
+		GameViewManager actualGame = new GameViewManager();
+		actualGame.createNewGame(stage);
+	}
 }
 
 	
