@@ -12,8 +12,8 @@ public class GameViewManager {
 	private Scene gameScene;
 	private Stage gameStage;
 	
-	private static final int GAME_WIDTH = 600;
-	private static final int GAME_HEIGHT = 600;
+	private static final int GAME_WIDTH = 800;
+	private static final int GAME_HEIGHT = 800;
 	
 	public GameViewManager() {
 		initializeStage();
