@@ -9,14 +9,9 @@ import javafx.stage.Stage;
 
 public class SettingsController {
 	
-	@FXML
-	Label label1;
 	
 	@FXML
-	ToggleButton but1;
-	
-	@FXML
-	Button quit;
+	Button quit,pause,play;
 	
 	@FXML
 	void handleQuit(ActionEvent actionevent) {
@@ -26,7 +21,8 @@ public class SettingsController {
 	
 	@FXML
 	void handleSound(ActionEvent event) {
-		label1.setText("Sound is Off");
+		
+		
 
 	}
 

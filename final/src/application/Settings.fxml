@@ -6,27 +6,31 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane minHeight="800.0" minWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SettingsController">
+<AnchorPane minHeight="800.0" minWidth="800.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SettingsController">
    <children>
-      <Label layoutX="268.0" layoutY="37.0" prefHeight="105.0" prefWidth="329.0" text="Settings">
+      <Label layoutX="268.0" layoutY="37.0" prefHeight="105.0" prefWidth="329.0" text="Settings" textFill="RED">
          <font>
             <Font name="System Bold" size="72.0" />
          </font>
       </Label>
-      <Label layoutX="94.0" layoutY="290.0" text="Sound FX">
+      <Label layoutX="94.0" layoutY="290.0" text="Sound FX" textFill="RED">
          <font>
-            <Font size="26.0" />
+            <Font name="System Bold" size="26.0" />
          </font>
       </Label>
-      <Label fx:id="label1" layoutX="400.0" layoutY="300.0" prefHeight="21.0" prefWidth="109.0" textFill="#141313" />
-      <ToggleButton fx:id="soundOn" layoutX="225.0" layoutY="287.0" mnemonicParsing="false" onAction="#handleSound" text="ON">
+      <Button fx:id="quit" layoutX="29.0" layoutY="22.0" mnemonicParsing="false" onAction="#handleQuit" text="Exit" textFill="RED">
+         <font>
+            <Font name="System Bold" size="19.0" />
+         </font>
+      </Button>
+      <Button fx:id="play" layoutX="230.0" layoutY="285.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="110.0" text="PLAY" textFill="RED">
          <font>
             <Font name="System Bold" size="22.0" />
          </font>
-      </ToggleButton>
-      <Button fx:id="quit" layoutX="29.0" layoutY="22.0" mnemonicParsing="false" onAction="#handleQuit" text="Exit">
+      </Button>
+      <Button fx:id="pause" layoutX="378.0" layoutY="285.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="110.0" text="PAUSE" textFill="RED">
          <font>
-            <Font name="System Bold" size="19.0" />
+            <Font name="System Bold" size="22.0" />
          </font>
       </Button>
    </children>

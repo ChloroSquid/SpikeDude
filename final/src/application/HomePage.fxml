@@ -1,32 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="800.0" maxWidth="800.0" minHeight="800.0" minWidth="800.0" prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainController">
+<AnchorPane maxHeight="800.0" maxWidth="800.0" minHeight="800.0" minWidth="800.0" prefHeight="800.0" prefWidth="800.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainController">
    <children>
-      <Button fx:id="play" layoutX="310.0" layoutY="555.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="162.0" text="Play">
+      <Button fx:id="play" layoutX="310.0" layoutY="555.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="162.0" text="Play" textFill="RED">
          <font>
             <Font name="System Bold" size="25.0" />
          </font>
       </Button>
-      <Label layoutX="160.0" layoutY="156.0" prefHeight="21.0" prefWidth="480.0" text="Spike Dude">
-         <font>
-            <Font name="System Bold" size="85.0" />
-         </font>
-      </Label>
-      <Button fx:id="exit" layoutX="24.0" layoutY="25.0" mnemonicParsing="false" onAction="#handleExit" text="Exit">
+      <Button fx:id="exit" layoutX="24.0" layoutY="25.0" mnemonicParsing="false" onAction="#handleExit" text="Exit" textFill="RED">
          <font>
             <Font name="System Bold" size="19.0" />
          </font>
       </Button>
-      <Button fx:id="settings" layoutX="310.0" layoutY="640.0" mnemonicParsing="false" onAction="#handleSettings" prefHeight="54.0" prefWidth="162.0" text="Settings">
+      <Button fx:id="settings" layoutX="310.0" layoutY="640.0" mnemonicParsing="false" onAction="#handleSettings" prefHeight="54.0" prefWidth="162.0" text="Settings" textFill="RED">
          <font>
             <Font name="System Bold" size="25.0" />
          </font>
       </Button>
+      <ImageView fitHeight="302.0" fitWidth="403.0" layoutX="240.0" layoutY="142.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../SpikeDude.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>
