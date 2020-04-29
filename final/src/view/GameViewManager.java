@@ -66,4 +66,8 @@ public class GameViewManager {
 		this.menuStage.hide();
 		gameStage.show();
 	}
+	
+	private void createBall() {
+		
+	}
 }
