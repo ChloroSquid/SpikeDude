@@ -76,8 +76,9 @@ public class GameViewManager {
 	}
 	
 	private void createBall() {
-		//Image image = new Image("file:/src/ball.png");
-		ball = new ImageView("file:ball.png");
+		//TODO: make the ball do stuff
+		Image image = new Image("/ball.png", 100,100,false,true);
+		ball = new ImageView(image);
 		ball.resize(100, 100);
 		ball.setLayoutX(GAME_WIDTH/2);
 		ball.setLayoutY(GAME_HEIGHT-90);
