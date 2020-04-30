@@ -1,5 +1,8 @@
 package view;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -22,6 +25,8 @@ public class GameViewManager {
 	
 	BALL ballEnum;
 	ImageView ball;
+	ImageView spike;
+	List<ImageView> spikeList; //variable number of spikes depending on resolution
 	
 	public GameViewManager() {
 		initializeStage();
@@ -71,6 +76,7 @@ public class GameViewManager {
 		//TODO add logic for ball
 		this.menuStage.hide();
 		createBall();
+		createSpikes();
 		gameStage.show();
 		
 	}
@@ -82,5 +88,24 @@ public class GameViewManager {
 		ball.setLayoutX(GAME_WIDTH/2-50);
 		ball.setLayoutY(GAME_HEIGHT/2-50);
 		gamePane.getChildren().add(ball);
+	}
+	
+	private void createSpikes() {
+		//spike aspect ratio is 0.8 so resizing should be a value along that ratio
+		final int SPIKE_WIDTH = 80; //number of spikes on screen = spike width / game width
+		Image image = new Image("/UpwardSpike.png",SPIKE_WIDTH,100,true,true);
+		
+		spikeList = new ArrayList<ImageView>();
+		for(int i = 0; i < GAME_WIDTH; i+=SPIKE_WIDTH) {
+			spike = new ImageView(image);
+			spikeList.add(spike);
+			//TODO: add this list of spikes to the bottom of the screen
+		}
+		for(int i = 0; i<spikeList.size(); ++i) {
+			spikeList.get(i).setLayoutX(i*SPIKE_WIDTH);
+			spikeList.get(i).setLayoutY(GAME_HEIGHT-100);
+			gamePane.getChildren().add(spikeList.get(i));
+		}
+		
 	}
 }
