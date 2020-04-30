@@ -27,6 +27,7 @@ public class GameViewManager {
 	ImageView ball;
 	ImageView spike;
 	List<ImageView> spikeList; //variable number of spikes depending on resolution
+	boolean keyPressed; //boolean in order to prevent held input from firing off multiple times
 	
 	public GameViewManager() {
 		initializeStage();
@@ -38,7 +39,7 @@ public class GameViewManager {
 		gameScene = new Scene(gamePane, GAME_WIDTH, GAME_HEIGHT);
 		gameStage = new Stage();
 		gameStage.setScene(gameScene);
-		
+		keyPressed = false;	
 	}
 	
 	private void createKeyListeners() {
@@ -47,14 +48,30 @@ public class GameViewManager {
 			@Override
 			public void handle(KeyEvent event) {
 				//todo finish handling
+				if(keyPressed) {
+					return;
+				}
+				
 				switch (event.getCode()){
 					case RIGHT:
+						//TODO: replace printlns with things that move the ball
+						System.out.println("RIGHT PRESSED");
+						keyPressed = true;
+						event.consume();
 						break;
 					case LEFT:
+						System.out.println("LEFT PRESSED");
+						keyPressed = true;
+						event.consume();
 						break;
 					case UP:
+						System.out.println("UP PRESSED");
+						keyPressed = true;
+						event.consume();
 						break;
 					default:
+						event.consume();
+						keyPressed = true;
 						break;
 				}
 			}
@@ -65,7 +82,28 @@ public class GameViewManager {
 			
 			@Override
 			public void handle(KeyEvent event) {
-				
+				switch (event.getCode()){
+				case RIGHT:
+					//TODO: remove the printlns after debugging
+					System.out.println("RIGHT RELEASED");
+					keyPressed = false;
+					event.consume();
+					break;
+				case LEFT:
+					System.out.println("LEFT RELEASED");
+					keyPressed = false;
+					event.consume();
+					break;
+				case UP:
+					System.out.println("UP RELEASED");
+					keyPressed = false;
+					event.consume();
+					break;
+				default:
+					keyPressed = false;
+					event.consume();			
+					break;
+			}
 			}
 			
 		});
