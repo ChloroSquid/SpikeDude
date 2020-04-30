@@ -53,17 +53,20 @@ public class GameViewManager {
 				}
 				
 				switch (event.getCode()){
+					case D:
 					case RIGHT:
 						//TODO: replace printlns with things that move the ball
 						System.out.println("RIGHT PRESSED");
 						keyPressed = true;
 						event.consume();
 						break;
+					case A:
 					case LEFT:
 						System.out.println("LEFT PRESSED");
 						keyPressed = true;
 						event.consume();
 						break;
+					case W:
 					case UP:
 						System.out.println("UP PRESSED");
 						keyPressed = true;
@@ -83,17 +86,20 @@ public class GameViewManager {
 			@Override
 			public void handle(KeyEvent event) {
 				switch (event.getCode()){
+				case D:
 				case RIGHT:
 					//TODO: remove the printlns after debugging
 					System.out.println("RIGHT RELEASED");
 					keyPressed = false;
 					event.consume();
 					break;
+				case A:
 				case LEFT:
 					System.out.println("LEFT RELEASED");
 					keyPressed = false;
 					event.consume();
 					break;
+				case W:
 				case UP:
 					System.out.println("UP RELEASED");
 					keyPressed = false;
@@ -137,7 +143,6 @@ public class GameViewManager {
 		for(int i = 0; i < GAME_WIDTH; i+=SPIKE_WIDTH) {
 			spike = new ImageView(image);
 			spikeList.add(spike);
-			//TODO: add this list of spikes to the bottom of the screen
 		}
 		for(int i = 0; i<spikeList.size(); ++i) {
 			spikeList.get(i).setLayoutX(i*SPIKE_WIDTH);
