@@ -3,6 +3,7 @@ package view;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -23,11 +24,16 @@ public class GameViewManager {
 	
 	private Stage menuStage;
 	
-	BALL ballEnum;
-	ImageView ball;
-	ImageView spike;
-	List<ImageView> spikeList; //variable number of spikes depending on resolution
-	boolean keyPressed; //boolean in order to prevent held input from firing off multiple times
+	private ImageView ball;
+	private ImageView spike;
+	private List<ImageView> spikeList; //variable number of spikes depending on resolution
+	private boolean keyPressed; //boolean in order to prevent held input from firing off multiple times
+	
+	
+	private int moveCode; //1 for up, 2 for left, 3 for right
+	private AnimationTimer gameTimer;
+	private int frameNum;
+	private int frameDecay;
 	
 	public GameViewManager() {
 		initializeStage();
@@ -40,6 +46,9 @@ public class GameViewManager {
 		gameStage = new Stage();
 		gameStage.setScene(gameScene);
 		keyPressed = false;	
+		moveCode = 0;
+		frameNum = 0;
+		frameDecay = 0;
 	}
 	
 	private void createKeyListeners() {
@@ -51,30 +60,34 @@ public class GameViewManager {
 				if(keyPressed) {
 					return;
 				}
-				
+				frameDecay = 0;
 				switch (event.getCode()){
 					case D:
 					case RIGHT:
 						//TODO: replace printlns with things that move the ball
 						System.out.println("RIGHT PRESSED");
 						keyPressed = true;
+						moveCode = 3;
 						event.consume();
 						break;
 					case A:
 					case LEFT:
 						System.out.println("LEFT PRESSED");
 						keyPressed = true;
+						moveCode = 2;
 						event.consume();
 						break;
 					case W:
 					case UP:
 						System.out.println("UP PRESSED");
 						keyPressed = true;
+						moveCode = 1;
 						event.consume();
 						break;
 					default:
-						event.consume();
+						moveCode = 0;
 						keyPressed = true;
+						event.consume();
 						break;
 				}
 			}
@@ -85,28 +98,26 @@ public class GameViewManager {
 			
 			@Override
 			public void handle(KeyEvent event) {
+				moveCode = 0;
+				keyPressed = false;
 				switch (event.getCode()){
 				case D:
 				case RIGHT:
 					//TODO: remove the printlns after debugging
 					System.out.println("RIGHT RELEASED");
-					keyPressed = false;
 					event.consume();
 					break;
 				case A:
 				case LEFT:
 					System.out.println("LEFT RELEASED");
-					keyPressed = false;
 					event.consume();
 					break;
 				case W:
 				case UP:
 					System.out.println("UP RELEASED");
-					keyPressed = false;
 					event.consume();
 					break;
 				default:
-					keyPressed = false;
 					event.consume();			
 					break;
 			}
@@ -121,6 +132,7 @@ public class GameViewManager {
 		this.menuStage.hide();
 		createBall();
 		createSpikes();
+		createGameLoop();
 		gameStage.show();
 		
 	}
@@ -150,5 +162,65 @@ public class GameViewManager {
 			gamePane.getChildren().add(spikeList.get(i));
 		}
 		
+	}
+	
+	
+	private void createGameLoop() {
+		gameTimer = new AnimationTimer() {
+			
+			@Override
+			public void handle(long now) {
+				if(frameNum % 60 == 0) { 
+					moveY(0); //set y acceleration to -gravity
+					frameNum = 0;
+				}
+				frameNum++;
+				switch (moveCode) {
+				
+					case 1:
+						moveY(1); 
+						break;
+					case 2:
+						moveX(2);
+						break;
+					case 3:
+						moveX(3);
+						break;
+					default:
+						break;
+				}
+				moveCode = 0;
+				//calculateVelocities();
+				//calculate the position of the ball every 1/60 of a second
+				//	high school physics equations
+				//	position = lastpos+(velocity*time)
+				//	velocityf = velocityi + acceleration*(time)
+				//	and set X velocity (I.E where it ends up next frame) to currX-currX(1-frameDecay/60) after calculations
+				//	and set Y velocity to currY+
+				//	X velocity decays to zero after a second
+				//  Y velocity is continuously decreasing by gravity constant
+			}
+		};
+		gameTimer.start();
+	}
+	
+	
+	//MOVE FUNCTIONS ADJUST VELOCITY!!! NOT ACCELERATION, NOT POSITION!!!!!!
+	private void moveY(int moveCode) {
+		//TODO: implement logic for moving upwards 
+		if(this.moveCode == 1) {
+			System.out.println("Move up");
+		}else {
+			System.out.println("Move down");
+		}
+		
+	}
+	
+	private void moveX(int moveCode) {
+		if(this.moveCode == 2) {
+			System.out.println("Move left");
+		}else {
+			System.out.println("Move right");
+		}
 	}
 }
