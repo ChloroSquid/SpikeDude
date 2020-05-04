@@ -24,9 +24,11 @@ public class GameViewManager {
 	
 	private final int Y_GRAVITY = 200;
 	private final int X_PUSH = 200;
-	private int xVelocity; //velocity in pixels per second
-	private int yVelocity;
+	private double xVelocity; //velocity in pixels per second
+	private double yVelocity;
 	private boolean xIsNeg;
+	private boolean yRoundUp;
+	
 	
 	
 	private Stage menuStage;
@@ -222,7 +224,7 @@ public class GameViewManager {
 				//	X velocity decays to zero after a second
 				//  Y velocity is continuously decreasing by gravity constant
 				
-				System.out.println(yVelocity);
+				System.out.println((double)yVelocity/60);
 			}
 		};
 		gameTimer.start();
@@ -254,16 +256,23 @@ public class GameViewManager {
 	
 	private void calculateVelocity() {
 		xIsNeg = (xVelocity<0)? true:false;
-		xVelocity = Math.abs(xVelocity - frameDecay/60*xVelocity); //decays to 0 over a second unless pushed in the other direction
+		xVelocity = Math.abs(xVelocity - frameDecay/90*xVelocity); //decays to some fraction of the push over a second unless pushed in the other direction
+		
 		if(xIsNeg) {
 			xVelocity = -xVelocity; //maintains if its going left or right
 		}
 		
 		yVelocity = yVelocity - Y_GRAVITY/60; //flatly decreases speed by the gravity constant
+		if(yVelocity>0) {
+			yRoundUp = false;
+		}else {
+			yRoundUp = true;
+		}
 	}
 	
 	private void calculatePosition() {
 		ball.setLayoutX(ball.getLayoutX()+(xVelocity/60)); //The velocities have to be adjusted by pixels per frame as they are in pixels per second
 		ball.setLayoutY(ball.getLayoutY()-(yVelocity/60));
+		
 	}
 }
