@@ -27,8 +27,8 @@ public class GameViewManager {
 	private double xVelocity; //velocity in pixels per second
 	private double yVelocity;
 	private boolean xIsNeg;
-	private boolean yRoundUp;
-	
+	private double newXPos;
+	private double newYPos;
 	
 	
 	private Stage menuStage;
@@ -60,6 +60,8 @@ public class GameViewManager {
 		frameDecay = 0;
 		xVelocity = 0;
 		yVelocity = 0;
+		newXPos = 0;
+		newYPos = 0;
 		xIsNeg = false;
 	}
 	
@@ -97,10 +99,7 @@ public class GameViewManager {
 						event.consume();
 						break;
 					case R:
-						ball.setLayoutX(GAME_WIDTH/2-50);
-						ball.setLayoutY(GAME_HEIGHT/2-50);
-						xVelocity = 0;
-						yVelocity = 0;
+						reset();
 					default:
 						moveCode = 0;
 						keyPressed = true;
@@ -224,7 +223,7 @@ public class GameViewManager {
 				//	X velocity decays to zero after a second
 				//  Y velocity is continuously decreasing by gravity constant
 				
-				System.out.println((double)yVelocity/60);
+				//System.out.println((double)yVelocity/60);
 			}
 		};
 		gameTimer.start();
@@ -238,7 +237,7 @@ public class GameViewManager {
 			//System.out.println("Move up");
 			yVelocity = yVelocity+250;
 		}else {
-			System.out.println("Move down");
+			//System.out.println("Move down");
 		}
 		
 	}
@@ -263,16 +262,29 @@ public class GameViewManager {
 		}
 		
 		yVelocity = yVelocity - Y_GRAVITY/60; //flatly decreases speed by the gravity constant
-		if(yVelocity>0) {
-			yRoundUp = false;
-		}else {
-			yRoundUp = true;
-		}
+		
 	}
 	
 	private void calculatePosition() {
+		newXPos = ball.getLayoutX()+(xVelocity/60);
+		newYPos = ball.getLayoutY()-(yVelocity/60);
+		if(newXPos>GAME_WIDTH-100 || newXPos < 0) {
+			xVelocity = -xVelocity*.5;
+		}
+		
+		if(newYPos<0) {
+			yVelocity = -yVelocity*.5;
+		}
+		
 		ball.setLayoutX(ball.getLayoutX()+(xVelocity/60)); //The velocities have to be adjusted by pixels per frame as they are in pixels per second
 		ball.setLayoutY(ball.getLayoutY()-(yVelocity/60));
 		
+	}
+	
+	private void reset() {
+		ball.setLayoutX(GAME_WIDTH/2-50);
+		ball.setLayoutY(GAME_HEIGHT/2-50);
+		xVelocity = 0;
+		yVelocity = 0;
 	}
 }
