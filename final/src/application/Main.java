@@ -8,10 +8,17 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 
 
-
+/**
+ * 
+ * @author Imani Braxton
+ *
+ */
 public class Main extends Application {
 		
 	@Override
+	/**
+	 * Start function that sets and loads the Home Page as well as starts the music
+	 */
 	public void start(Stage primaryStage) throws IOException {
 		primaryStage.setTitle("Spike Dude");
 		
@@ -25,6 +32,10 @@ public class Main extends Application {
 		primaryStage.show();
 	}
 
+	/**
+	 * Launches the application
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		launch(args);
 	}
