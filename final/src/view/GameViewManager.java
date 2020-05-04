@@ -209,7 +209,7 @@ public class GameViewManager {
 		gamePane.getChildren().add(downSpike);
 		spikeVelocity = 0;
 		popPoint = spikeXPos+DS_WIDTH/2;
-		System.out.println("spike added");
+		//System.out.println("spike added");
 		
 	}
 	
@@ -336,7 +336,7 @@ public class GameViewManager {
 		
 		if(spikeYPos > GAME_HEIGHT - (DS_HEIGHT+100)) {
 			gamePane.getChildren().remove(downSpike);
-			System.out.println("spike removed");
+			//System.out.println("spike removed");
 			spikeOnScreen = false;
 		}
 		
