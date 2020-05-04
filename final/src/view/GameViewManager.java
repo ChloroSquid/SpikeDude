@@ -96,21 +96,18 @@ public class GameViewManager {
 				switch (event.getCode()){
 					case D:
 					case RIGHT:
-						//System.out.println("RIGHT PRESSED");
 						keyPressed = true;
 						moveCode = 3;
 						event.consume();
 						break;
 					case A:
 					case LEFT:
-						//System.out.println("LEFT PRESSED");
 						keyPressed = true;
 						moveCode = 2;
 						event.consume();
 						break;
 					case W:
 					case UP:
-						//System.out.println("UP PRESSED");
 						keyPressed = true;
 						moveCode = 1;
 						event.consume();
@@ -136,18 +133,14 @@ public class GameViewManager {
 				switch (event.getCode()){
 				case D:
 				case RIGHT:
-					//TODO: remove the printlns after debugging
-					//System.out.println("RIGHT RELEASED");
 					event.consume();
 					break;
 				case A:
 				case LEFT:
-					//System.out.println("LEFT RELEASED");
 					event.consume();
 					break;
 				case W:
 				case UP:
-					//System.out.println("UP RELEASED");
 					event.consume();
 					break;
 				case R:
@@ -169,7 +162,6 @@ public class GameViewManager {
 	
 	public void createNewGame(Stage menuStage) {
 		this.menuStage = menuStage;
-		//TODO add logic for ball
 		this.menuStage.hide();
 		createBall();
 		createSpikes();
@@ -179,7 +171,6 @@ public class GameViewManager {
 	}
 	
 	private void createBall() {
-		//TODO: make the ball do stuff
 		Image image = new Image("/ball.png", 100,100,false,true);
 		ball = new ImageView(image);
 		ball.setLayoutX(GAME_WIDTH/2-50);
@@ -188,6 +179,7 @@ public class GameViewManager {
 	}
 	
 	private void createSpikes() {
+		
 		//spike aspect ratio is 0.8 so resizing should be a value along that ratio
 		final int SPIKE_WIDTH = 80; //number of spikes on screen = spike width / game width
 		Image image = new Image("/UpwardSpike.png",SPIKE_WIDTH,100,true,true);
@@ -216,7 +208,6 @@ public class GameViewManager {
 		gamePane.getChildren().add(downSpike);
 		spikeVelocity = 0;
 		popPoint = spikeXPos+DS_WIDTH/2;
-		//System.out.println("spike added");
 		
 	}
 	
@@ -253,22 +244,12 @@ public class GameViewManager {
 						break;
 				}
 				moveCode = 0;
-				//moveBlah()
 				// 	SETS THE VELOCITY OF EACH BALL
 				checkCollision();
 				calculateVelocity();
 				//	calcs the current velocity of the ball based on the amount of time a move command is given
 				calculatePosition();
 				//calculate the position of the ball every 1/60 of a second (frame)
-				//	high school physics equations
-				//	position = lastpos+(velocity*time)
-				//	velocityf = velocityi + acceleration*(time)
-				//	and set X velocity (I.E where it ends up next frame) to currX-currX(1-frameDecay/60) after calculations
-				//	and set Y velocity to currY+currAccelY(1/60)
-				//	X velocity decays to zero after a second
-				//  Y velocity is continuously decreasing by gravity constant
-				
-				//System.out.println((double)yVelocity/60);
 			}
 		};
 		
@@ -277,23 +258,16 @@ public class GameViewManager {
 	
 	//update velocities
 	private void moveY(int moveCode) {
-		//TODO: implement logic for moving upwards 
 		if(this.moveCode == 1) {
-			//System.out.println("Move up");
 			yVelocity = yVelocity+250;
-		}else {
-			//System.out.println("Move down");
 		}
-		
 	}
 	
 	private void moveX(int moveCode) {
 		frameDecay = 0;
 		if(this.moveCode == 2) {
-			//System.out.println("Move left");
 			xVelocity = xVelocity-X_PUSH;
 		}else {
-			//System.out.println("Move right");
 			xVelocity = xVelocity+X_PUSH;
 		}
 	}
@@ -314,6 +288,7 @@ public class GameViewManager {
 		spikeYPos = downSpike.getLayoutY()-spikeVelocity/60;
 		newXPos = ball.getLayoutX()+(xVelocity/60);
 		newYPos = ball.getLayoutY()-(yVelocity/60);
+		
 		if(newXPos>GAME_WIDTH-100 || newXPos < 0) {
 			xVelocity = -xVelocity*.5;
 		}
@@ -343,7 +318,6 @@ public class GameViewManager {
 		
 		if(spikeYPos > GAME_HEIGHT - (DS_HEIGHT+100)) {
 			gamePane.getChildren().remove(downSpike);
-			//System.out.println("spike removed");
 			spikeOnScreen = false;
 		}
 		
