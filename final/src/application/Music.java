@@ -5,6 +5,8 @@ import java.io.File;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
+import javafx.util.Duration;
+
 
 
 
@@ -19,10 +21,12 @@ public class Music {
 		mediaPlayer = new MediaPlayer(sound);
 	}
 	
-	
-	
-	public void playMusic(String filename) {
-
+	public void playMusic() {
+		mediaPlayer.setOnEndOfMedia(new Runnable() {
+			public void run() {
+				mediaPlayer.seek(Duration.ZERO);
+			}
+		});
 		mediaPlayer.play();
 	}
 	

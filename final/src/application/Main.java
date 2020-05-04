@@ -16,8 +16,7 @@ public class Main extends Application {
 		primaryStage.setTitle("Spike Dude");
 		
 		Music music = new Music("sand.mp3");
-		String name = music.getName();
-		music.playMusic(name);
+		music.playMusic();
 		
 		Parent root = FXMLLoader.load(getClass().getResource("HomePage.fxml"));
 		Scene scene = new Scene(root,800,800);
