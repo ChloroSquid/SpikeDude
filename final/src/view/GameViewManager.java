@@ -22,6 +22,13 @@ public class GameViewManager {
 	private static final int GAME_WIDTH = 800;
 	private static final int GAME_HEIGHT = 800;
 	
+	private final int Y_GRAVITY = 200;
+	private final int X_PUSH = 200;
+	private int xVelocity;
+	private int yVelocity;
+	private boolean xIsNeg;
+	
+	
 	private Stage menuStage;
 	
 	private ImageView ball;
@@ -49,6 +56,9 @@ public class GameViewManager {
 		moveCode = 0;
 		frameNum = 0;
 		frameDecay = 0;
+		xVelocity = 0;
+		yVelocity = 0;
+		xIsNeg = false;
 	}
 	
 	private void createKeyListeners() {
@@ -117,6 +127,11 @@ public class GameViewManager {
 					System.out.println("UP RELEASED");
 					event.consume();
 					break;
+				case R:
+					ball.setLayoutX(GAME_WIDTH/2-50);
+					ball.setLayoutY(GAME_HEIGHT/2-50);
+					xVelocity = 0;
+					yVelocity = 0;
 				default:
 					event.consume();			
 					break;
@@ -175,6 +190,9 @@ public class GameViewManager {
 					frameNum = 0;
 				}
 				frameNum++;
+				if (frameDecay<60) {
+					frameDecay++;
+				}
 				switch (moveCode) {
 				
 					case 1:
@@ -190,13 +208,17 @@ public class GameViewManager {
 						break;
 				}
 				moveCode = 0;
-				//calculateVelocities();
-				//calculate the position of the ball every 1/60 of a second
+				//moveBlah()
+				// 	SETS THE VELOCITY OF EACH BALL
+				calculateVelocity();
+				//	calcs the current velocity of the ball based on the amount of time a move command is given
+				calculatePosition();
+				//calculate the position of the ball every 1/60 of a second (frame)
 				//	high school physics equations
 				//	position = lastpos+(velocity*time)
 				//	velocityf = velocityi + acceleration*(time)
 				//	and set X velocity (I.E where it ends up next frame) to currX-currX(1-frameDecay/60) after calculations
-				//	and set Y velocity to currY+
+				//	and set Y velocity to currY+currAccelY(1/60)
 				//	X velocity decays to zero after a second
 				//  Y velocity is continuously decreasing by gravity constant
 			}
@@ -210,6 +232,7 @@ public class GameViewManager {
 		//TODO: implement logic for moving upwards 
 		if(this.moveCode == 1) {
 			System.out.println("Move up");
+			yVelocity = yVelocity+250;
 		}else {
 			System.out.println("Move down");
 		}
@@ -217,10 +240,28 @@ public class GameViewManager {
 	}
 	
 	private void moveX(int moveCode) {
+		frameDecay = 0;
 		if(this.moveCode == 2) {
 			System.out.println("Move left");
+			xVelocity = -X_PUSH;
 		}else {
 			System.out.println("Move right");
+			xVelocity = X_PUSH;
 		}
+	}
+	
+	private void calculateVelocity() {
+		xIsNeg = (xVelocity<0)? true:false;
+		xVelocity = Math.abs(xVelocity - frameDecay/60*xVelocity); //decays to 0 over a second unless pushed in the other direction
+		if(xIsNeg) {
+			xVelocity = -xVelocity; //maintains if its going left or right
+		}
+		
+		yVelocity = yVelocity - Y_GRAVITY/60; //flatly decreases speed by the gravity constant
+	}
+	
+	private void calculatePosition() {
+		ball.setLayoutX(ball.getLayoutX()+(xVelocity/60));
+		ball.setLayoutY(ball.getLayoutY()-(yVelocity/60));
 	}
 }
