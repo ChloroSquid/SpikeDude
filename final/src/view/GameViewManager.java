@@ -24,7 +24,7 @@ public class GameViewManager {
 	
 	private final int Y_GRAVITY = 200;
 	private final int X_PUSH = 200;
-	private int xVelocity;
+	private int xVelocity; //velocity in pixels per second
 	private int yVelocity;
 	private boolean xIsNeg;
 	
@@ -75,25 +75,30 @@ public class GameViewManager {
 					case D:
 					case RIGHT:
 						//TODO: replace printlns with things that move the ball
-						System.out.println("RIGHT PRESSED");
+						//System.out.println("RIGHT PRESSED");
 						keyPressed = true;
 						moveCode = 3;
 						event.consume();
 						break;
 					case A:
 					case LEFT:
-						System.out.println("LEFT PRESSED");
+						//System.out.println("LEFT PRESSED");
 						keyPressed = true;
 						moveCode = 2;
 						event.consume();
 						break;
 					case W:
 					case UP:
-						System.out.println("UP PRESSED");
+						//System.out.println("UP PRESSED");
 						keyPressed = true;
 						moveCode = 1;
 						event.consume();
 						break;
+					case R:
+						ball.setLayoutX(GAME_WIDTH/2-50);
+						ball.setLayoutY(GAME_HEIGHT/2-50);
+						xVelocity = 0;
+						yVelocity = 0;
 					default:
 						moveCode = 0;
 						keyPressed = true;
@@ -114,24 +119,19 @@ public class GameViewManager {
 				case D:
 				case RIGHT:
 					//TODO: remove the printlns after debugging
-					System.out.println("RIGHT RELEASED");
+					//System.out.println("RIGHT RELEASED");
 					event.consume();
 					break;
 				case A:
 				case LEFT:
-					System.out.println("LEFT RELEASED");
+					//System.out.println("LEFT RELEASED");
 					event.consume();
 					break;
 				case W:
 				case UP:
-					System.out.println("UP RELEASED");
+					//System.out.println("UP RELEASED");
 					event.consume();
 					break;
-				case R:
-					ball.setLayoutX(GAME_WIDTH/2-50);
-					ball.setLayoutY(GAME_HEIGHT/2-50);
-					xVelocity = 0;
-					yVelocity = 0;
 				default:
 					event.consume();			
 					break;
@@ -221,6 +221,8 @@ public class GameViewManager {
 				//	and set Y velocity to currY+currAccelY(1/60)
 				//	X velocity decays to zero after a second
 				//  Y velocity is continuously decreasing by gravity constant
+				
+				System.out.println(yVelocity);
 			}
 		};
 		gameTimer.start();
@@ -231,7 +233,7 @@ public class GameViewManager {
 	private void moveY(int moveCode) {
 		//TODO: implement logic for moving upwards 
 		if(this.moveCode == 1) {
-			System.out.println("Move up");
+			//System.out.println("Move up");
 			yVelocity = yVelocity+250;
 		}else {
 			System.out.println("Move down");
@@ -242,11 +244,11 @@ public class GameViewManager {
 	private void moveX(int moveCode) {
 		frameDecay = 0;
 		if(this.moveCode == 2) {
-			System.out.println("Move left");
-			xVelocity = -X_PUSH;
+			//System.out.println("Move left");
+			xVelocity = xVelocity-X_PUSH;
 		}else {
-			System.out.println("Move right");
-			xVelocity = X_PUSH;
+			//System.out.println("Move right");
+			xVelocity = xVelocity+X_PUSH;
 		}
 	}
 	
@@ -261,7 +263,7 @@ public class GameViewManager {
 	}
 	
 	private void calculatePosition() {
-		ball.setLayoutX(ball.getLayoutX()+(xVelocity/60));
+		ball.setLayoutX(ball.getLayoutX()+(xVelocity/60)); //The velocities have to be adjusted by pixels per frame as they are in pixels per second
 		ball.setLayoutY(ball.getLayoutY()-(yVelocity/60));
 	}
 }
