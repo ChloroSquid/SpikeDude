@@ -274,6 +274,9 @@ public class GameViewManager {
 		
 		if(newYPos<0) {
 			yVelocity = -yVelocity*.5;
+		} else if( newYPos>GAME_HEIGHT-190) {
+			reset();
+			return;
 		}
 		
 		ball.setLayoutX(ball.getLayoutX()+(xVelocity/60)); //The velocities have to be adjusted by pixels per frame as they are in pixels per second
