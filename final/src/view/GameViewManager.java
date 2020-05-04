@@ -2,17 +2,17 @@ package view;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import model.BALL;
+
 
 public class GameViewManager {
 	private AnchorPane gamePane;
@@ -21,28 +21,38 @@ public class GameViewManager {
 	
 	private static final int GAME_WIDTH = 800;
 	private static final int GAME_HEIGHT = 800;
+	private static final int DS_WIDTH = 20;
+	private static final int DS_HEIGHT = 200;
+	private static final int Y_GRAVITY = 200;
+	private static final int X_PUSH = 200;
 	
-	private final int Y_GRAVITY = 200;
-	private final int X_PUSH = 200;
 	private double xVelocity; //velocity in pixels per second
 	private double yVelocity;
 	private boolean xIsNeg;
 	private double newXPos;
 	private double newYPos;
 	
+	private double spikeVelocity;
+	private double spikeXPos;
+	private double spikeYPos;
+	private double popPoint;
+	
 	
 	private Stage menuStage;
 	
 	private ImageView ball;
 	private ImageView spike;
+	private ImageView downSpike;
 	private List<ImageView> spikeList; //variable number of spikes depending on resolution
 	private boolean keyPressed; //boolean in order to prevent held input from firing off multiple times
+	private boolean spikeOnScreen;
 	
 	
 	private int moveCode; //1 for up, 2 for left, 3 for right
 	private AnimationTimer gameTimer;
 	private int frameNum;
 	private int frameDecay;
+	Random rand;
 	
 	public GameViewManager() {
 		initializeStage();
@@ -63,6 +73,8 @@ public class GameViewManager {
 		newXPos = 0;
 		newYPos = 0;
 		xIsNeg = false;
+		spikeOnScreen = false;
+		rand = new Random();
 	}
 	
 	private void createKeyListeners() {
@@ -70,7 +82,6 @@ public class GameViewManager {
 			
 			@Override
 			public void handle(KeyEvent event) {
-				//todo finish handling
 				if(keyPressed) {
 					return;
 				}
@@ -78,7 +89,6 @@ public class GameViewManager {
 				switch (event.getCode()){
 					case D:
 					case RIGHT:
-						//TODO: replace printlns with things that move the ball
 						//System.out.println("RIGHT PRESSED");
 						keyPressed = true;
 						moveCode = 3;
@@ -188,12 +198,31 @@ public class GameViewManager {
 		
 	}
 	
+	private void createFallingSpike() {
+		spikeOnScreen = true;
+		Image image = new Image("/DownwardSpike.png",DS_WIDTH,DS_HEIGHT,false,true);
+		downSpike = new ImageView(image);
+		spikeXPos = rand.nextInt(GAME_WIDTH-DS_WIDTH);
+		spikeYPos = -DS_HEIGHT;
+		downSpike.setLayoutX(spikeXPos);
+		downSpike.setLayoutY(-DS_HEIGHT);
+		gamePane.getChildren().add(downSpike);
+		spikeVelocity = 0;
+		popPoint = spikeXPos+DS_WIDTH/2;
+		System.out.println("spike added");
+		
+	}
+	
 	
 	private void createGameLoop() {
 		gameTimer = new AnimationTimer() {
 			
 			@Override
 			public void handle(long now) {
+				if(!spikeOnScreen) {
+					createFallingSpike();
+				}
+				
 				if(frameNum % 60 == 0) { 
 					moveY(0); //set y acceleration to -gravity
 					frameNum = 0;
@@ -219,6 +248,7 @@ public class GameViewManager {
 				moveCode = 0;
 				//moveBlah()
 				// 	SETS THE VELOCITY OF EACH BALL
+				checkCollision();
 				calculateVelocity();
 				//	calcs the current velocity of the ball based on the amount of time a move command is given
 				calculatePosition();
@@ -270,28 +300,55 @@ public class GameViewManager {
 		}
 		
 		yVelocity = yVelocity - Y_GRAVITY/60; //flatly decreases speed by the gravity constant
-		
+		spikeVelocity = spikeVelocity - Y_GRAVITY/60;
 	}
 	
 	private void calculatePosition() {
+		spikeYPos = downSpike.getLayoutY()-spikeVelocity/60;
 		newXPos = ball.getLayoutX()+(xVelocity/60);
 		newYPos = ball.getLayoutY()-(yVelocity/60);
 		if(newXPos>GAME_WIDTH-100 || newXPos < 0) {
 			xVelocity = -xVelocity*.5;
 		}
-		
 		if(newYPos<0) {
 			yVelocity = -yVelocity*.5;
-		} else if( newYPos>GAME_HEIGHT-190) {
-			handleExit();
-			return;
 		}
 		
+		if(ball.getLayoutY() + 100 > spikeYPos && ball.getLayoutY() < spikeYPos+DS_HEIGHT) {
+			if(	
+				(popPoint-DS_WIDTH/2 < newXPos+100)
+			&&  (popPoint+DS_WIDTH/2 > newXPos))
+			{
+				xVelocity = -xVelocity*.75;
+			}
+		}
+		downSpike.setLayoutY(spikeYPos);
 		ball.setLayoutX(ball.getLayoutX()+(xVelocity/60)); //The velocities have to be adjusted by pixels per frame as they are in pixels per second
 		ball.setLayoutY(ball.getLayoutY()-(yVelocity/60));
 		
 	}
 	
+	private void checkCollision() {
+		if( ball.getLayoutY()>GAME_HEIGHT-190) {
+			handleExit();
+			return;
+		}
+		
+		if(spikeYPos > GAME_HEIGHT - (DS_HEIGHT+100)) {
+			gamePane.getChildren().remove(downSpike);
+			System.out.println("spike removed");
+			spikeOnScreen = false;
+		}
+		
+		if( 
+			(Math.abs(ball.getLayoutY()-100 - downSpike.getLayoutY()-DS_HEIGHT/4) < 20 ) //if the bottom of the spike is on the same level as the top of the ball 
+			&& (popPoint > ball.getLayoutX())
+			&& (popPoint < ball.getLayoutX()+100) // and the ball's X coords are within the spike
+		){
+			handleExit();
+		} 
+		
+	}
 	private void reset() {
 		ball.setLayoutX(GAME_WIDTH/2-50);
 		ball.setLayoutY(GAME_HEIGHT/2-50);
