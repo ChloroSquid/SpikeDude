@@ -1,3 +1,8 @@
+/**@author Corey Blanke <gtm871>
+ * 
+ * Class which creates and manages everything in the main game loop.
+ */
+
 package view;
 
 import java.util.ArrayList;
@@ -55,11 +60,19 @@ public class GameViewManager {
 	private int frameDecay;
 	Random rand;
 	
+	/**
+	 * Constructor for the Game View Manager.
+	 * Calls functions to set up the stage and the keyboard listeners.
+	 * 
+	 */
 	public GameViewManager() {
 		initializeStage();
 		createKeyListeners();
 	}
 	
+	/**
+	 * Initializes the elements of the stage to starting values.
+	 */
 	private void initializeStage() {
 		gamePane = new AnchorPane();
 		gameScene = new Scene(gamePane, GAME_WIDTH, GAME_HEIGHT);
@@ -79,6 +92,11 @@ public class GameViewManager {
 		gameStarted = false;
 	}
 	
+	/**
+	 * Creates a keyboard listener and defines the behavior of each keypress.
+	 * Also includes behavior on key release.
+	 * Mainly used to control the game.
+	 */
 	private void createKeyListeners() {
 		gameScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			
@@ -160,6 +178,10 @@ public class GameViewManager {
 		});
 	}
 	
+	/**
+	 * Function to invoke the game loop from a controller class.
+	 * @param menuStage stage of the main menu to be hidden when the game is invoked
+	 */
 	public void createNewGame(Stage menuStage) {
 		this.menuStage = menuStage;
 		this.menuStage.hide();
@@ -170,6 +192,9 @@ public class GameViewManager {
 		
 	}
 	
+	/**
+	 * Creates the ball and adds it onto the game pane.
+	 */
 	private void createBall() {
 		Image image = new Image("/ball.png", 100,100,false,true);
 		ball = new ImageView(image);
@@ -178,6 +203,9 @@ public class GameViewManager {
 		gamePane.getChildren().add(ball);
 	}
 	
+	/**
+	 * Creates the row of spikes at the bottom as a visual indicator of the pop zone.
+	 */
 	private void createSpikes() {
 		
 		//spike aspect ratio is 0.8 so resizing should be a value along that ratio
@@ -197,6 +225,9 @@ public class GameViewManager {
 		
 	}
 	
+	/**
+	 * Creates a long, thin, falling spike that appears in a random position along the top of the pane.
+	 */
 	private void createFallingSpike() {
 		spikeOnScreen = true;
 		Image image = new Image("/DownwardSpike.png",DS_WIDTH,DS_HEIGHT,false,true);
@@ -211,7 +242,16 @@ public class GameViewManager {
 		
 	}
 	
-	
+	/**
+	 * Initializes and runs the game loop, as well as manages the calculations and positions of each asset every frame.
+	 * 
+	 * Every frame does the following:
+	 * -Maintains two internal timers, one tracking the number of frames passed, one tracking the amount of time since the last key press.
+	 * Both are capped at one second.
+	 * -If the random falling spike has left the screen, create a new one.
+	 * -Updates the velocity of the ball if a key has been pressed that frame
+	 * -Invokes collision checking, velocity calculations, and position calculations
+	 */
 	private void createGameLoop() {
 		gameTimer = new AnimationTimer() {
 			
@@ -222,7 +262,6 @@ public class GameViewManager {
 				}
 				
 				if(frameNum % 60 == 0) { 
-					moveY(0); //set y acceleration to -gravity
 					frameNum = 0;
 				}
 				frameNum++;
@@ -256,13 +295,20 @@ public class GameViewManager {
 	}
 	
 	
-	//update velocities
+	/**
+	 * Updates the velocity in the Y direction based on user input.
+	 * @param moveCode Integer maintaining the current state of the movement commands from the user.
+	 */
 	private void moveY(int moveCode) {
 		if(this.moveCode == 1) {
 			yVelocity = yVelocity+250;
 		}
 	}
 	
+	/**
+	 * Updates the velocity in the X direction based on user input.
+	 * @param moveCode Integer maintaining the current state of the movement commands from the user.
+	 */
 	private void moveX(int moveCode) {
 		frameDecay = 0;
 		if(this.moveCode == 2) {
@@ -272,6 +318,12 @@ public class GameViewManager {
 		}
 	}
 	
+	/**
+	 * Calculates the exact velocity of each asset in one particular frame.
+	 * -Calculates the speed based on gravity for the Y direction of the falling spike.
+	 * -Calculates the speed based on gravity and user input for the Y direction of the ball.
+	 * -Calculates the speed based on user input and a decay factor for the X direction of the ball.
+	 */
 	private void calculateVelocity() {
 		xIsNeg = (xVelocity<0)? true:false;
 		xVelocity = Math.abs(xVelocity - frameDecay/90*xVelocity); //decays to some fraction of the push over a second unless pushed in the other direction
@@ -284,24 +336,28 @@ public class GameViewManager {
 		spikeVelocity = spikeVelocity - Y_GRAVITY/60;
 	}
 	
+	/**
+	 * Calculates and draws the position of the assets in one particular frame.
+	 * Also does some collision checking with the spike and the wall (handles the side bouncing behavior)
+	 */
 	private void calculatePosition() {
 		spikeYPos = downSpike.getLayoutY()-spikeVelocity/60;
 		newXPos = ball.getLayoutX()+(xVelocity/60);
 		newYPos = ball.getLayoutY()-(yVelocity/60);
 		
 		if(newXPos>GAME_WIDTH-100 || newXPos < 0) {
-			xVelocity = -xVelocity*.5;
+			xVelocity = -xVelocity*.5; //Bounces off the wall at half speed
 		}
 		if(newYPos<0) {
-			yVelocity = -yVelocity*.5;
+			yVelocity = -yVelocity*.5; //Bounces off the ceiling at half speed
 		}
 		
-		if(ball.getLayoutY() + 100 > spikeYPos && ball.getLayoutY() < spikeYPos+DS_HEIGHT) {
+		if(ball.getLayoutY() + 100 > spikeYPos && ball.getLayoutY() < spikeYPos+DS_HEIGHT) { //Check new position will be inside spike
 			if(	
 				(popPoint-DS_WIDTH/2 < newXPos+100)
 			&&  (popPoint+DS_WIDTH/2 > newXPos))
 			{
-				xVelocity = -xVelocity*.75;
+				xVelocity = -xVelocity*.75; //Bounce off side of spike at three quarters speed
 			}
 		}
 		downSpike.setLayoutY(spikeYPos);
@@ -310,6 +366,12 @@ public class GameViewManager {
 		
 	}
 	
+	/**
+	 * Checks if the ball is inside of a pop zone, as well as handles the falling spike when it approaches the pop zone
+	 * If ball is inside the pop zone at the bottom, end the game.
+	 * If the top of the ball touches the tip of the falling spike, end the game.
+	 * If the spike is in the pop zone, remove the spike.
+	 */
 	private void checkCollision() {
 		if( ball.getLayoutY()>GAME_HEIGHT-190) {
 			handleExit();
@@ -330,6 +392,11 @@ public class GameViewManager {
 		} 
 		
 	}
+	
+	/**
+	 * "Hidden" debug function accessible by pressing R.
+	 * Resets the position and velocity of the ball to the original values.
+	 */
 	private void reset() {
 		ball.setLayoutX(GAME_WIDTH/2-50);
 		ball.setLayoutY(GAME_HEIGHT/2-50);
@@ -337,6 +404,9 @@ public class GameViewManager {
 		yVelocity = 0;
 	}
 	
+	/**
+	 * Closes the game.
+	 */
 	private void handleExit() {
 		gameStage.close();
 	}
