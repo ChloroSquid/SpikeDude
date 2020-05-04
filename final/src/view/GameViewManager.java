@@ -133,6 +133,14 @@ public class GameViewManager {
 					//System.out.println("UP RELEASED");
 					event.consume();
 					break;
+				case R:
+					reset();
+					event.consume();
+					break;
+				case ESCAPE:
+					event.consume();
+					handleExit();
+					break;
 				default:
 					event.consume();			
 					break;
@@ -230,7 +238,7 @@ public class GameViewManager {
 	}
 	
 	
-	//MOVE FUNCTIONS ADJUST VELOCITY!!! NOT ACCELERATION, NOT POSITION!!!!!!
+	//update velocities
 	private void moveY(int moveCode) {
 		//TODO: implement logic for moving upwards 
 		if(this.moveCode == 1) {
@@ -275,7 +283,7 @@ public class GameViewManager {
 		if(newYPos<0) {
 			yVelocity = -yVelocity*.5;
 		} else if( newYPos>GAME_HEIGHT-190) {
-			reset();
+			handleExit();
 			return;
 		}
 		
@@ -289,5 +297,9 @@ public class GameViewManager {
 		ball.setLayoutY(GAME_HEIGHT/2-50);
 		xVelocity = 0;
 		yVelocity = 0;
+	}
+	
+	private void handleExit() {
+		gameStage.close();
 	}
 }
