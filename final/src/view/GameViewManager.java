@@ -18,6 +18,7 @@ public class GameViewManager {
 	private AnchorPane gamePane;
 	private Scene gameScene;
 	private Stage gameStage;
+	private boolean gameStarted;
 	
 	private static final int GAME_WIDTH = 800;
 	private static final int GAME_HEIGHT = 800;
@@ -75,6 +76,7 @@ public class GameViewManager {
 		xIsNeg = false;
 		spikeOnScreen = false;
 		rand = new Random();
+		gameStarted = false;
 	}
 	
 	private void createKeyListeners() {
@@ -82,9 +84,14 @@ public class GameViewManager {
 			
 			@Override
 			public void handle(KeyEvent event) {
+				if(!gameStarted) {
+					gameTimer.start();
+					gameStarted = true;
+				}
 				if(keyPressed) {
 					return;
 				}
+				
 				frameDecay = 0;
 				switch (event.getCode()){
 					case D:
@@ -264,7 +271,7 @@ public class GameViewManager {
 				//System.out.println((double)yVelocity/60);
 			}
 		};
-		gameTimer.start();
+		
 	}
 	
 	
